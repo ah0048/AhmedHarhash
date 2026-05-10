@@ -19,7 +19,8 @@ namespace ConsoleApp1
         // array will take less space
         // performace of array is better in this case in caching and low memory overhead (contiguous memory)
         // will have to use array when the priority is to optimize performance and reduce used space
-        // if these are the requiremnets a dynamic circular array will used 
+        // if these are the requiremnets a dynamic circular array will be used
+
         private readonly LinkedList<int> list = new LinkedList<int>();
         public int Count { 
             get
@@ -54,11 +55,68 @@ namespace ConsoleApp1
         }
     }
 
+    public class Person
+    {
+        public string? Name { get;}
+        public int Age { get;}
+        public string? Job { get; }
+        public double Salary { get;}
+        public string? Address { get;}
+
+
+        public Person(string name, int age, string job, double salary, string address)
+        {
+            Name = name;
+            Age = age;
+            Job = job;
+            Salary = salary;
+            Address = address;
+        }
+
+
+        public override int GetHashCode()
+        {
+            unchecked 
+            {
+                int hash = 17;
+                
+                if (Name != null)
+                    hash = hash * 23 + Name.GetHashCode();
+
+                hash = hash * 23 + Age.GetHashCode();
+
+                if (Job != null)
+                    hash = hash * 23 + Job.GetHashCode();
+
+                hash = hash * 23 + Salary.GetHashCode();
+
+                if (Address != null)
+                    hash = hash * 23 + Address.GetHashCode();
+
+                return hash;
+            }
+        }
+        public override bool Equals(object? obj)
+        {
+            Person other = obj as Person;
+
+            if (other == null) return false;
+
+            if (this.Name == other.Name && this.Age == other.Age &&
+                this.Job == other.Job && this.Salary == other.Salary &&
+                this.Address == other.Address)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("================================= First Task =================================");
+            Console.WriteLine("================================= Task 1 =================================");
 
             IQueue queue = new QueueLike();
 
@@ -103,6 +161,45 @@ namespace ConsoleApp1
             {
                 Console.WriteLine(ex.Message); // Expected: Queue is empty
             }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("================================= Task 2 =================================");
+
+                Console.WriteLine("=== Create objects ===");
+
+                var p1 = new Person("Ahmed", 25, "Dev", 1000, "Cairo");
+                var p2 = new Person("Ahmed", 25, "Dev", 1000, "Cairo"); // same content
+                var p3 = new Person("Ali", 30, "Manager", 2000, "Giza"); // different
+
+                Console.WriteLine($"p1.Equals(p2): {p1.Equals(p2)}"); // true
+                Console.WriteLine($"p1 == p2: {p1 == p2}");           // false (different refs)
+
+                Console.WriteLine("\n=== Dictionary Test ===");
+
+                var dict = new Dictionary<Person, string>();
+
+                dict[p1] = "First person";
+
+                Console.WriteLine(dict[p2]); // should work (same hash code)
+
+                Console.WriteLine("\n=== HashSet Test ===");
+
+                var set = new HashSet<Person>();
+
+                set.Add(p1);
+                set.Add(p2); // should not add (duplicate hash code)
+
+                Console.WriteLine($"HashSet count: {set.Count}"); //  1
+
+                Console.WriteLine("\n=== Hashtable Test ===");
+
+                var hashtable = new Hashtable();
+
+                hashtable[p1] = "Stored in hashtable";
+
+                Console.WriteLine(hashtable[p2]); // should work
+
         }
     }
 }
