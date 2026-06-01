@@ -36,8 +36,8 @@ internal class Program
                     Console.WriteLine($"Now playing: {currentTrack}");
                     Monitor.PulseAll(locker);
                 }
-                Random rnd = new Random();
-                Thread.Sleep(rnd.Next(10000, 20001));  // Simulate track duration 10 to 20 secs
+
+                Thread.Sleep(random.Next(10000, 20001));  // Simulate track duration 10 to 20 secs
             }
 
             lock (locker) { 
