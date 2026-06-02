@@ -1,5 +1,5 @@
 ﻿using System.Collections.Concurrent;
-
+// 1. Using Dictionary as cache build concurrent CRUD operations for it
 namespace ConsoleApp2
 {
     #region sol 1 

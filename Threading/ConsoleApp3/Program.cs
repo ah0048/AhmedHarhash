@@ -1,5 +1,7 @@
 ﻿using System.Collections.Concurrent;
-
+// 2. Given a list of 1,000,000 integers:
+// - calculate the square of each number,
+// - store the result in a thread-safe collection.
 namespace ConsoleApp3
 {
     internal class Program
